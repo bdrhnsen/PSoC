@@ -1,12 +1,6 @@
-/** @file       encoderpassword.c
- *  @brief      ENCODERPASSWORD application program file
- *  @copyright  (c) 2021-Arcelik - All Rights Reserved
- *              Permission to use, reproduce, copy, prepare derivative works,
- *              modify, distribute, perform, display or sell this software and/or
- *              its documentation for any purpose is prohibited without the express
- *              written consent of Arcelik A.S.
- *  @author     Ozkan AKGUL
- *  @date       2.06.2021
+/**
+ *  @author     Bedirhan Sen
+ * 
  */
 #define FILE_ENCODERPASSWORD_C
 
