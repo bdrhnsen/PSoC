@@ -141,14 +141,14 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
             break;
             case p46Released:
             {   
-                if(i<level){
+                
                    if (true_colors[i] == 1)
                     {
                         i++; 
                         if(i==level)
                         {
-                            level++;devIoPut(consts->sevenSegmentDisplay, level); PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
-                            devIoPut(consts->sevenSegmentDisplay, level); 
+                            level++;devIoPut(consts->sevenSegmentDisplay, level); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
+                            devIoPut(consts->sevenSegmentDisplay, level);  eventPost(process->enumeration,eStateSimon,NULL,0);
                         }// true, increase index
                         devIoPut(consts->sevenSegmentDisplay, level); 
                     }
@@ -159,13 +159,7 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
                         eventPost(process->enumeration,eStateInit,NULL,0);
                         
                     }
-                 
-                }
-                else 
-                {
-                    level++;devIoPut(consts->sevenSegmentDisplay, level); PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
-                    devIoPut(consts->sevenSegmentDisplay, level); 
-                }
+
                 devIoPut(consts->redLed, 0);
             }
             break;
@@ -178,14 +172,14 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
             break;
             case p70Released:
             {
-                if(i<level){
+                
                    if (true_colors[i] == 2)
                     {
                         i++; // true increase index
                          if(i==level)
                         {
-                            level++;devIoPut(consts->sevenSegmentDisplay, level); PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
-                            devIoPut(consts->sevenSegmentDisplay, level); 
+                            level++;devIoPut(consts->sevenSegmentDisplay, level); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
+                            devIoPut(consts->sevenSegmentDisplay, level); eventPost(process->enumeration,eStateSimon,NULL,0);
                         }// true, increase index
                         devIoPut(consts->sevenSegmentDisplay, level); 
                          
@@ -193,20 +187,13 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
                     else 
                     {
                         isTrue = 0;i=0;level=3;
-                        level++;devIoPut(consts->sevenSegmentDisplay, level); PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
+                        level++;devIoPut(consts->sevenSegmentDisplay, level); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
                         eventPost(process->enumeration,eStateInit,NULL,0);
                         
                     }
-                 
+                 devIoPut(consts->blueLed, 0);
                 }
-                else 
-                {
-                    level++;PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler);
-                    devIoPut(consts->sevenSegmentDisplay, level); 
-                }
-                devIoPut(consts->blueLed, 0);
-            }
-            
+
             break;
                 case p71Pressed:
            
@@ -224,8 +211,8 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
                         i++; // true increase index
                         if(i==level)
                             {
-                                level++;devIoPut(consts->sevenSegmentDisplay, level); PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
-                                devIoPut(consts->sevenSegmentDisplay, level); 
+                                level++;devIoPut(consts->sevenSegmentDisplay, level); devIoPut(consts->buzzer, (uint32_t)locked); // you failed
+                                devIoPut(consts->sevenSegmentDisplay, level);  eventPost(process->enumeration,eStateSimon,NULL,0);
                             }// true, increase index
                             devIoPut(consts->sevenSegmentDisplay, level); 
                         
@@ -238,15 +225,24 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
                         
                     }
 
-                devIoPut(consts->yellowLed, 0);
+               devIoPut(consts->yellowLed, 0); 
             }
             break;
             
             case eStateInit:
+            
         {
-                
+            devIoPut(consts->buzzer, (uint32_t)buttonPress);
                 PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler);
         }
+        break;
+            case eStateSimon:
+        
+            {
+                devIoPut(consts->buzzer, (uint32_t)buttonPress);
+            PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler);
+            }
+
             break;
             
         
@@ -265,14 +261,12 @@ static PROCESS_HANDLER_PROTO(encoderPasswordInitialStateHandler)
     UNUSED(params); // REMOVE IF USED
     UNUSED(consts); // REMOVE IF USED
     devIoPut(consts->sevenSegmentDisplay, level); 
-    srand(100);     
-          /* for(int k=0;k<level;k++)
+    srand(10000);     
+           for(int k=0;k<level;k++)
             {
                 true_colors[k] = rand() % 3 +1; // fill simon says array with random numbers between 1 and 3
                 
             }
-            */
-    true_colors[0] = 1;true_colors[1] = 2;true_colors[2] = 3;
             while(i<level)
             {
                 if(true_colors[i] == 1)
