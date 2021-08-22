@@ -1,6 +1,12 @@
-/**
- *  @author     Bedirhan Sen
- * 
+/** @file       encoderpassword.c
+ *  @brief      ENCODERPASSWORD application program file
+ *  @copyright  (c) 2021-Arcelik - All Rights Reserved
+ *              Permission to use, reproduce, copy, prepare derivative works,
+ *              modify, distribute, perform, display or sell this software and/or
+ *              its documentation for any purpose is prohibited without the express
+ *              written consent of Arcelik A.S.
+ *  @author     Ozkan AKGUL
+ *  @date       2.06.2021
  */
 #define FILE_ENCODERPASSWORD_C
 
@@ -231,10 +237,30 @@ static PROCESS_HANDLER_PROTO(encoderPasswordUnLockingStateHandler)
         }
         break;
             case eStateSimon:
-        
             {
                 devIoPut(consts->buzzer, (uint32_t)buttonPress);
-            PROCESS_STATE_CHANGE(process, encoderPasswordInitialStateHandler);
+                for(int k=0;k<level;k++)
+                {
+                    true_colors[k] = rand() % 3 +1; // fill simon says array with random numbers between 1 and 3
+                    
+                }
+                while(i<level)
+                {
+                    if(true_colors[i] == 1)
+                    {
+                      devIoPut(consts->redLed, 1);CyDelay(1000);devIoPut(consts->redLed, 0);
+                    }
+                    else if(true_colors[i] == 2)
+                    {
+                       devIoPut(consts->blueLed, 1);CyDelay(1000);devIoPut(consts->blueLed, 0);
+                    }
+                    else if(true_colors[i] == 3)
+                    {
+                      devIoPut(consts->yellowLed, 1);CyDelay(1000);devIoPut(consts->yellowLed, 0);
+                    }
+                i++;
+                }
+                i=0;
             }
 
             break;
